@@ -1,0 +1,13 @@
+<app-chart-table 
+    [title]="title"
+    [years]="years"
+    [months]="months"
+    [suppliers]="suppliers"
+    [selectedYear]="selectedYear"
+    [selectedMonth]="selectedMonth"
+    [showMonthSelector]="true"
+    [loadingData]="loadingData"
+    (loadingDataChange)="setLoadingData($event)"
+    (yearChange)="onYearChange($event)" 
+    (monthChange)="onMonthChange($event)">
+</app-chart-table>

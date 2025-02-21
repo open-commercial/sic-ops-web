@@ -1,0 +1,78 @@
+<section class="app-pedido">
+	<div class="d-flex flex-row align-items-center my-3">
+		<h1 class="h3 m-0 flex-fill text-truncate"><fa-icon [icon]="['fas', 'square-poll-vertical']"></fa-icon>
+			Dashboard</h1>
+	</div>
+	<ngb-accordion class="ops-accordion" [closeOthers]="false" #acc="ngbAccordion" activeIds="ngb-accordion-2">
+		<ngb-panel id="ngb-accordion-1" (shown)="loadPurchaseData()">
+			<ng-template ngbPanelTitle>
+				<div class="d-flex align-items-center justify-content-between w-100">
+					<fa-icon *ngIf="acc.isExpanded('ngb-accordion-1')" [icon]="['fas', 'chevron-up']"
+					class="chevronStyle me-2"></fa-icon>
+					<fa-icon *ngIf="!acc.isExpanded('ngb-accordion-1')" [icon]="['fas', 'chevron-down']"
+					class="chevronStyle me-2"></fa-icon>
+					<span class="me-auto">Compras</span>
+				</div>
+			</ng-template>
+			<ng-template ngbPanelContent>
+				<div class="container-fluid">
+					<div class="row p-0 gap-4 mt-2">
+						<div class="col-sm-12 col-md col-lg p-0">
+							<app-chart-bar-graph-yearly [title]="'Compras por año'" [sucursal]="sucursalSeleccionada"
+								[chartType]="'compras'"></app-chart-bar-graph-yearly>
+						</div>
+						<div class="col-sm-12 col-md col-lg p-0">
+							<app-chart-table-yearly [title]="'Compras por año por proveedor'" [sucursal]="sucursalSeleccionada"
+								[dataType]="'compras'"></app-chart-table-yearly>
+						</div>
+					</div>
+					<div class="row gap-4 p-0 mt-4">
+						<div class="col-sm-12 col-md col-lg p-0">
+							<app-chart-bar-graph-monthly [title]="'Compras por mes'" [sucursal]="sucursalSeleccionada"
+								[chartType]="'compras'"></app-chart-bar-graph-monthly>
+						</div>
+						<div class="col-sm-12 col-md col-lg p-0">
+							<app-chart-table-monthly [title]="'Compras por mes por proveedor'" [sucursal]="sucursalSeleccionada"
+								[dataType]="'compras'"></app-chart-table-monthly>
+						</div>
+					</div>
+				</div>
+			</ng-template>
+		</ngb-panel>
+		<ngb-panel id="ngb-accordion-2" (shown)="loadSalesData()">
+			<ng-template ngbPanelTitle>
+				<div class="d-flex align-items-center justify-content-between w-100">
+					<fa-icon *ngIf="acc.isExpanded('ngb-accordion-2')" [icon]="['fas', 'chevron-up']"
+						class="chevronStyle me-2"></fa-icon>
+					<fa-icon *ngIf="!acc.isExpanded('ngb-accordion-2')" [icon]="['fas', 'chevron-down']"
+						class="chevronStyle me-2"></fa-icon>
+					<span class="me-auto">Ventas</span>
+				</div>
+			</ng-template>
+			<ng-template ngbPanelContent>
+				<div class="container-fluid">
+					<div class="row p-0 gap-4 mt-2">
+						<div class="col-sm-12 col-md col-lg p-0">
+							<app-chart-bar-graph-yearly [title]="'Ventas por año'" [sucursal]="sucursalSeleccionada"
+								[chartType]="'ventas'"></app-chart-bar-graph-yearly>
+						</div>
+						<div class="col-sm-12 col-md col-lg p-0">
+							<app-chart-table-yearly [title]="'Ventas por año por cliente'" [sucursal]="sucursalSeleccionada"
+								[dataType]="'ventas'"></app-chart-table-yearly>
+						</div>
+					</div>
+					<div class="row gap-4 p-0 mt-4">
+						<div class="col-sm-12 col-md col-lg p-0">
+							<app-chart-bar-graph-monthly [title]="'Ventas por mes'" [sucursal]="sucursalSeleccionada"
+								[chartType]="'ventas'"></app-chart-bar-graph-monthly>
+						</div>
+						<div class="col-sm-12 col-md col-lg p-0">
+							<app-chart-table-monthly [title]="'Ventas por mes por cliente'" [sucursal]="sucursalSeleccionada"
+								[dataType]="'ventas'"></app-chart-table-monthly>
+						</div>
+					</div>
+				</div>
+			</ng-template>
+		</ngb-panel>
+	</ngb-accordion>
+</section>

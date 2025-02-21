@@ -1,0 +1,11 @@
+<app-chart-table
+    [dataType]="dataType" 
+    [title]="title" 
+    [years]="years" 
+    [suppliers]="suppliers"
+    [selectedYear]="selectedYear"
+    [showMonthSelector]="false"
+    [loadingData]="loadingData"
+    (loadingDataChange)="setLoadingData($event)"
+    (change)="onYearChange($event)">
+</app-chart-table>

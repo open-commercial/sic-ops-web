@@ -1,9 +1,9 @@
 import { filter, Subscription } from 'rxjs';
 import { NavigationEnd, Router } from '@angular/router';
 import { NgbAccordion, NgbAccordionConfig, NgbPanelChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { Component, EventEmitter, Output, ViewChild, OnDestroy } from '@angular/core';
-import {AuthService} from '../../services/auth.service';
-import {Rol} from '../../models/rol';
+import { Component, EventEmitter, Output, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { Rol } from '../../models/rol';
 
 @Component({
   selector: 'app-side-nav',
@@ -15,27 +15,23 @@ export class SideNavComponent implements OnDestroy {
   tieneRolAdministrador = false;
   tieneRolAdminOEncargado = false;
   tieneRolVendedor = false;
-
+  isSidenavOpen = false;
   menuData = [];
-
   @Output() menuOptionClick = new EventEmitter<void>();
-
   @ViewChild('accordion') accordion: NgbAccordion;
-
   subscription: Subscription;
-  url='';
-  accordionActiveId='';
+  url = '';
+  accordionActiveId = '';
 
-  constructor(private authService: AuthService,
-              private router: Router,
-              accordionConfig: NgbAccordionConfig) {
+  constructor(private readonly authService: AuthService,
+              private readonly router: Router,              
+              private readonly changeDetectorRef: ChangeDetectorRef,
+              accordionConfig: NgbAccordionConfig,) {
     accordionConfig.type = 'dark';
     this.subscription = new Subscription();
-
     this.tieneRolAdministrador = this.authService.userHasAnyOfTheseRoles([Rol.ADMINISTRADOR]);
     this.tieneRolAdminOEncargado = this.authService.userHasAnyOfTheseRoles([Rol.ADMINISTRADOR, Rol.ENCARGADO]);
     this.tieneRolVendedor = this.authService.userHasAnyOfTheseRoles([Rol.VENDEDOR]);
-
     this.menuData = [
       {
         seccion: 'Administración',
@@ -138,21 +134,57 @@ export class SideNavComponent implements OnDestroy {
         .pipe(filter(event => event instanceof NavigationEnd))
         .subscribe((event: NavigationEnd) => {
           let url = '/' + event.urlAfterRedirects.split('/')[1];
+
           if (url.indexOf('?') >= 0) {
             url = url.split('?')[0];
           }
-
           const elemento = this.menuData.filter(m => {
             return m.rutas.filter(r => r.route.indexOf(url) === 0).length > 0;
           });
 
           this.accordionActiveId = elemento.length ? elemento[0].id : '';
+
+          this.handleSidenavState(url);
+
         })
     );
   }
 
+  ngOnInit(): void {
+    const currentUrl = this.router.url;
+    this.handleSidenavState(currentUrl);
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  handleSidenavState(url: string) {
+    const routesCloseSideNav = ['/dashboard']
+    if (routesCloseSideNav.includes(url)) {
+      this.setSidenavState(false);
+    } else {
+      this.setSidenavState(this.isSidenavOpen);
+    }
+
+    this.changeDetectorRef.detectChanges();
+
+  }
+
+  setSidenavState(open: boolean) {
+    if (this.isSidenavOpen !== open) {
+      this.isSidenavOpen = open;
+      if (!open) {
+        this.menuOptionClick.emit();
+      }
+    }
+  }
+  openSideNav() {
+    this.setSidenavState(true);
+  }
+
+  closeSidenav() {
+    this.setSidenavState(false);
   }
 
   optionClick() {
@@ -162,6 +194,12 @@ export class SideNavComponent implements OnDestroy {
   public beforeChange($event: NgbPanelChangeEvent) {
     if (this.accordion.isExpanded($event.panelId)) {
       $event.preventDefault();
+    }
+  }
+
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.optionClick();
     }
   }
 }

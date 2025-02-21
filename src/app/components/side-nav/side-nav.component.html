@@ -4,6 +4,15 @@
       <fa-icon [icon]="['fas', 'times']"></fa-icon>
     </button>
   </div>
+  <div *ngIf="tieneRolAdministrador" 
+        class="ops-accordion styleEstadisticas d-flex align-items-center"
+        (keydown)="handleKeyDown($event)" 
+        (click)="optionClick(); closeSidenav()"
+        routerLink="/dashboard"
+        style="cursor: pointer;">
+      <fa-icon [icon]="['fas', 'square-poll-vertical']" class="icon ps-3"></fa-icon>
+      <span>Dashboard</span>
+  </div>
   <ngb-accordion id="menu" class="ops-accordion" [closeOthers]="true" #accordion [activeIds]="accordionActiveId" (panelChange)="beforeChange($event)">
     <ng-template ngFor let-m [ngForOf]="menuData">
       <ngb-panel [id]="m.id" *ngIf="m.show">

@@ -1,0 +1,22 @@
+<section class="container">
+    <span>{{ title}}</span>
+    <div class="styleSelect" *ngIf="!loadingData">
+        <div class="buttonStyle mr-2"><span>Año:</span></div>
+        <select name="purchasePerMonth" class="form-select form-select-sm ng-pristine ng-invalid ng-touched"
+            [(ngModel)]="selectedYear" (change)="onYearChange($event)">
+            <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+        </select>
+    </div>
+    <div *ngIf="loadingData">
+        <fa-icon class="spinner-primary d-flex align-items-center justify-content-center mt-2"
+            [icon]="['fas', 'circle-notch']" [spin]="true" [size]="'3x'"></fa-icon>
+    </div>
+    <div *ngIf="!loadingData && chartDataArray.length === 0" class="alert alert-secondary mt-2 text-center w-fit">
+        No hay información disponible para este período. Seleccione otro período.
+    </div>
+    <div class="canvasStyle" *ngIf="!loadingData && chartDataArray.length > 0">
+        <canvas baseChart [data]="barChartData" [options]="barChartOptions" [plugins]="barChartPlugins"
+            [legend]="barChartLegend" [type]="'bar'">
+        </canvas>
+    </div>
+</section>

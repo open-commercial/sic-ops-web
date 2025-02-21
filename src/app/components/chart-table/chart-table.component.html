@@ -1,0 +1,43 @@
+<section class="container">
+    <span>{{ title }}</span>
+    <div *ngIf="loadingData">
+        <fa-icon class="spinner-primary d-flex align-items-center justify-content-center mt-2"
+            [icon]="['fas', 'circle-notch']" [spin]="true" [size]="'3x'"></fa-icon>
+    </div>
+    <div class="styleDateContainer">
+    <div class="styleYear" *ngIf="!loadingData">
+        <div class="buttonStyle"><span>Año:</span></div>        
+        <select name="year" class="form-select form-select-sm" [(ngModel)]="selectedYear" (change)="onYearChange($event)" >
+            <option *ngFor="let year of years" [value]="year"> {{year}}</option>
+        </select>
+    </div>
+        <div *ngIf="showMonthSelector && !loadingData" class="styleMonth">
+        <div class="buttonStyle"><span>Mes:</span></div>
+        <select name="month" class="form-select form-select-sm"
+                [(ngModel)]="selectedMonth" (change)="onMonthChange($event)">
+            <option *ngFor="let month of months" [value]="month.value">{{month.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div *ngIf="!loadingData && suppliers.length === 0" class="alert alert-secondary mt-2 text-center">
+        No hay información disponible para este período. Seleccione otro período.
+    </div>
+    <div *ngIf="!loadingData && suppliers.length > 0" class="table-responsive custom-table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Proveedor</th>
+                    <th scope="col">Monto $</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <tr *ngFor="let supplier of suppliers; let i = index">
+                    <td>{{i + 1}}</td>
+                    <td>{{supplier.entidad}}</td>
+                    <td>{{supplier.monto | currency:'ARS':'symbol':'1.0-2'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
